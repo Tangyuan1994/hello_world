@@ -3,10 +3,7 @@
 Wanyanyuan Tang:LMFI
 Mounia Bouhriz: SSSR
 
-
-<font color="blue">
 ## 1. Impala et Hive :
-<font>
 
 Préparation :
 
@@ -41,9 +38,9 @@ LOCATION '/user/hive/warehouse/new_auth_10000000.txt'
 sudo service zookeeper-server start
 sudo service hive-server2 start
 ```
-<font color="blue">
+
 ### 1) Le nombre de ligne de logs où les champs n’ont pas de valeur valide représentés par le symbole «? » : 
-<font>
+
  ```
 SELECT count FROM project WHERE usersource = '?' or userdest = '?' or pcsource = '?' or pcdest = '?' or cnxtype = '?' or authtype = '?' or authorient = '?' or decision = '?'
  ```
@@ -53,9 +50,9 @@ Remarque : On a remarqué que seuls les champs « cnxtype » et « authtype » c
  ```
 SELECT count FROM project WHERE cnxtype = '?' or authtype = '?'
  ```
-<font color="blue">
+
 ⇒ Résultat : 5813280
-<font>
+
 
 
 ### 2) Le nombre d’utilisateur qui se connectent au système :  
