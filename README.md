@@ -30,7 +30,8 @@ LOCATION '/user/hive/warehouse/new_auth_10000000.txt'
 
 - On démarre les services nécessaires : 
 
-```sudo service zookeeper-server start
+```
+sudo service zookeeper-server start
 sudo service hive-server2 start
 ```
 
@@ -40,37 +41,43 @@ SELECT count FROM project WHERE usersource = '?' or userdest = '?' or pcsource =
 
 Remarque : On a remarqué que seuls les champs « cnxtype » et « authtype » contiennent le symbole « ? », on peut donc lancer la requête suivante également:
  
+ ```
 SELECT count FROM project WHERE cnxtype = '?' or authtype = '?'
-
+ ```
 ⇒ Résultat : 5813280
 
 ### 2) Le nombre d’utilisateur qui se connectent au système :  
 
+ ```
 SELECT count( DISTINCT usersource) FROM project
-
+ ```
+ 
 ⇒ Résultat : 32292
 
 ### 3) Calculer le nombre de connexions par utilisateur : 
 
 Pour calculer ce nombre, on a considéré uniquement les connexions qui ont abouti, c’est à dire, les connexions avec la valeur « Success » dans le champs « decision »
 
+ ```
 SELECT usersource, count from projet WHERE decision ='Success' group by usersource 
-
+ ```
 
 ⇒ Le résultat de cette requête est stocké dans le fichier « query-impala-117.csv » attaché au projet. 
 
 Tri par ordre décroissant : 
 
+ ```
 SELECT usersource, count as number from project WHERE decision ='Success' group by usersource ORDER BY number DESC
-
+ ```
 ⇒ Le résultat de cette requête est stocké dans le fichier « query-impala-118.csv ».
 
 ## 2. Spark 
 Pour cette partie du projet, nous avons choisi d’utiliser le langage Scala. 
 
 command:
+ ```
 spark-shell --packages graphframes:graphframes:0.1.0-spark1.6 -i BigData_Wanyanyuan_Mounia.scala
-
+ ```
 ### 1. // lire le fichier de logs et le stocker dans la variable "file".
 
 
@@ -85,7 +92,7 @@ val cleanfile = file.filter(line => !(line.contains("?")))
 ### 3. // calculer le nombre d'accès d'un utilisateur à une machine 
  ```val trifile = cleanfile.map(line=>line.split(",")).map(fields=>((fields(1),fields(3)),1)).reduceByKey((v1,v2) => v1+v2)    ```
 
-###4. //Afficher les Top10 des accès les plus fréquents, on fait un sortby avec la valeur « False » pour trier les éléments du haut en bas, et un take(10) pour afficher uniquement les 10 premiers. 
+### 4. //Afficher les Top10 des accès les plus fréquents, on fait un sortby avec la valeur « False » pour trier les éléments du haut en bas, et un take(10) pour afficher uniquement les 10 premiers. 
 
  ```
  cleanfile.map(line=>line.split(",")).map(fields=>((fields(1),fields(3)),1)).reduceByKey((v1,v2) => v1+v2).sortBy(_._2,false).take(10)
