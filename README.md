@@ -84,57 +84,71 @@ val cleanfile = file.filter(line => !(line.contains("?")))
  ```
 ### 3. // calculer le nombre d'accès d'un utilisateur à une machine 
  ```val trifile = cleanfile.map(line=>line.split(",")).map(fields=>((fields(1),fields(3)),1)).reduceByKey((v1,v2) => v1+v2)    ```
+
 ###4. //Afficher les Top10 des accès les plus fréquents, on fait un sortby avec la valeur « False » pour trier les éléments du haut en bas, et un take(10) pour afficher uniquement les 10 premiers. 
- ```cleanfile.map(line=>line.split(",")).map(fields=>((fields(1),fields(3)),1)).reduceByKey((v1,v2) => v1+v2).sortBy(_._2,false).take(10)
+
+ ```
+ cleanfile.map(line=>line.split(",")).map(fields=>((fields(1),fields(3)),1)).reduceByKey((v1,v2) => v1+v2).sortBy(_._2,false).take(10)
  ```
  ### 5. //Sauvegarder les résultats dans HDFS 
  ```trifile.saveAsTextFile("/home/cloudera/result")
   ```
 // Récupérer le résultat du HDFS au disk local 
- ```hdfs dfs -get /home/cloudera/result result
+ ```
+ hdfs dfs -get /home/cloudera/result result
  ```
 ⇒ Le résultat est stocké dans les fichiers : Part-00000, Part-00001, Part-00002, Part-00003, Part-00004, attachés au projet. 
 
 ### 6. Création de graphe : 
 
-```import org.graphframes.GraphFrame
+```
+import org.graphframes.GraphFrame
  ```
 //On récupère le champs usersource et on met sa valeur dans Id, et son type « utilisateur » dans type. 
  
- ```val userfile = file.map(line=>line.split(",")).map(fields=>((fields(1),"utilisateur"))) 
+ ```
+ val userfile = file.map(line=>line.split(",")).map(fields=>((fields(1),"utilisateur"))) 
  ```
 //on crée le vertex correspondant 
  
- ```val userfileg=userfile.toDF("id","type")
+ ```
+ val userfileg=userfile.toDF("id","type")
  ```
 //On récupère le champs pcsource et on met sa valeur dans Id, et son type «machine» dans type.
  
- ```val machinefile = file.map(line=>line.split(",")).map(fields=>((fields(3),"machine")))
+ ```
+ val machinefile = file.map(line=>line.split(",")).map(fields=>((fields(3),"machine")))
  ```
 //on crée le vertex correspondant
 
- ```val machinefileg=machinefile.toDF("id","type")
+ ```
+ val machinefileg=machinefile.toDF("id","type")
  ```
 //on rassemble les deux parties dans un même vertex 
 
- ```val totalfile=userfileg.unionAll(machinefileg)
+ ```
+ val totalfile=userfileg.unionAll(machinefileg)
     val v=totalfile.toDF("id", "type").select("id","type").distinct()
  ```
 //Récupérer les éléments du fichier Trifile un à un et le mettre dans le fichier newtrifile 
  
- ```val newtrifile = trifile.map(fields=>(fields._1._1, fields._1._2, fields._2))
+ ```
+ val newtrifile = trifile.map(fields=>(fields._1._1, fields._1._2, fields._2))
  ```
 //Créer les arcs et stocker le résultat dans la variable e
  
- ```val e=newtrifile.toDF("src","dst","weight")
+ ```
+ val e=newtrifile.toDF("src","dst","weight")
  ```
 //Créer le graphe : 
  
- ```val g = GraphFrame(v,e) 
+ ```
+ val g = GraphFrame(v,e) 
  ```
 //vérifier qu’on a bien créé les vertex et les arcs :
  
- ```g.vertices.show()
+ ```
+ g.vertices.show()
 g.edges.show()
 ```
 
