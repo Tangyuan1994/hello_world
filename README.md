@@ -104,7 +104,7 @@ val machinefileg=machinefile.toDF("id","type")
 //on rassemble les deux parties dans un même vertex 
 val totalfile=userfileg.unionAll(machinefileg)
 
-val v=totalfile.toDF("id", "type") 
+val v=totalfile.toDF("id", "type").select("id","type").distinct()
 
 //Récupérer les éléments du fichier Trifile un à un et le mettre dans le fichier newtrifile 
 val newtrifile = trifile.map(fields=>(fields._1._1, fields._1._2, fields._2))
