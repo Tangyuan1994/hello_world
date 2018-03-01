@@ -1,6 +1,12 @@
-# hello_world
-## 1. Impala et Hive :
+# Projet de BigData
 
+Wanyanyuan Tang:LMFI
+Mounia Bouhriz: SSSR
+
+
+<font color="blue">
+## 1. Impala et Hive :
+<font>
 
 Préparation :
 
@@ -35,25 +41,31 @@ LOCATION '/user/hive/warehouse/new_auth_10000000.txt'
 sudo service zookeeper-server start
 sudo service hive-server2 start
 ```
-
+<font color="blue">
 ### 1) Le nombre de ligne de logs où les champs n’ont pas de valeur valide représentés par le symbole «? » : 
-
+<font>
+ ```
 SELECT count FROM project WHERE usersource = '?' or userdest = '?' or pcsource = '?' or pcdest = '?' or cnxtype = '?' or authtype = '?' or authorient = '?' or decision = '?'
-
+ ```
+ 
 Remarque : On a remarqué que seuls les champs « cnxtype » et « authtype » contiennent le symbole « ? », on peut donc lancer la requête suivante également:
  
  ```
 SELECT count FROM project WHERE cnxtype = '?' or authtype = '?'
  ```
+<font color="blue">
 ⇒ Résultat : 5813280
+<font>
+
 
 ### 2) Le nombre d’utilisateur qui se connectent au système :  
 
  ```
 SELECT count( DISTINCT usersource) FROM project
  ```
- 
+<font color="blue"> 
 ⇒ Résultat : 32292
+<font>
 
 ### 3) Calculer le nombre de connexions par utilisateur : 
 
@@ -81,7 +93,6 @@ spark-shell --packages graphframes:graphframes:0.1.0-spark1.6 -i BigData_Wanyany
  ```
 ### 1.  lire le fichier de logs et le stocker dans la variable "file".
 
-
 ```
 val file = sc.textFile("/user/hive/warehouse/new_auth_10000000.txt") 
  ```
@@ -98,7 +109,7 @@ val cleanfile = file.filter(line => !(line.contains("?")))
  ```
  cleanfile.map(line=>line.split(",")).map(fields=>((fields(1),fields(3)),1)).reduceByKey((v1,v2) => v1+v2).sortBy(_._2,false).take(10)
  ```
- ### 5. //Sauvegarder les résultats dans HDFS 
+ ### 5. Sauvegarder les résultats dans HDFS 
  ```trifile.saveAsTextFile("/home/cloudera/result")
   ```
  Récupérer le résultat du HDFS au disk local 
