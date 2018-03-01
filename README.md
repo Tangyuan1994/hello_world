@@ -1,6 +1,6 @@
 # Projet de BigData
 
-## Wanyanyuan Tang:LMFI   &  Mounia Bouhriz: SSSR
+### Wanyanyuan Tang:LMFI   &  Mounia Bouhriz: SSSR
 
 ## 1. Impala et Hive :
 
