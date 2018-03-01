@@ -1,7 +1,6 @@
 # Projet de BigData
 
-Wanyanyuan Tang:LMFI
-Mounia Bouhriz: SSSR
+## Wanyanyuan Tang:LMFI   &  Mounia Bouhriz: SSSR
 
 ## 1. Impala et Hive :
 
@@ -107,9 +106,12 @@ val cleanfile = file.filter(line => !(line.contains("?")))
  cleanfile.map(line=>line.split(",")).map(fields=>((fields(1),fields(3)),1)).reduceByKey((v1,v2) => v1+v2).sortBy(_._2,false).take(10)
  ```
  ### 5. Sauvegarder les résultats dans HDFS 
- ```trifile.saveAsTextFile("/home/cloudera/result")
-  ```
+ 
+ ```
+ trifile.saveAsTextFile("/home/cloudera/result")
+ ```
  Récupérer le résultat du HDFS au disk local 
+ 
  ```
  hdfs dfs -get /home/cloudera/result result
  ```
